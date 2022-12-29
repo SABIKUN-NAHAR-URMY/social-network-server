@@ -17,6 +17,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         const usersCollection = client.db('socialNetwork').collection('users');
+        const postCollection = client.db('socialNetwork').collection('posts');
         
 
         // app.get('/category', async (req, res) => {
@@ -38,14 +39,6 @@ async function run() {
             res.send(result);
         })
 
-        // app.post('/products', async (req, res) => {
-        //     const product = req.body;
-        //     const result = await watchesProductsCollection.insertOne(product);
-        //     res.send(result);
-        // });
-
-        
-
         app.post('/users', async (req, res) => {
             const user = req.body;
             const query = {
@@ -60,26 +53,40 @@ async function run() {
             res.send(result);
         })
 
-        // app.put('/users/:email', async (req, res) => {
-        //     const email = req.params.email;
-        //     const query = { email};
-        //     const updateDoc = {
-        //         $set: {
-        //             aboutMe: aboutMe,
-        //             address: address,
-        //             email: email,
-        //             interests: interests,
-        //             languages: languages,
-        //             name: name,
-        //             university: university,
-        //             workExp: workExp,
+        app.patch('/users/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email};
+            const option = {upsert : true};
+            const updateDoc = {
+                $set: {
+                    bio: bio,
+                    address: address,
+                    email: email,
+                    interests: interests,
+                    languages: languages,
+                    name: name,
+                    university: university,
+                    workExp: workExp,
 
-        //         }
-        //     }
-        //     const result = await usersCollection.updateOne(query, updateDoc);
-        //     res.send(result);
+                }
+            }
+            const result = await usersCollection.updateOne(query, updateDoc, option);
+            res.send(result);
 
-        // })
+        })
+
+
+        app.get('/posts', async(req, res)=>{
+            const query = {};
+            const posts = await postCollection.find(query).toArray();
+            res.send(posts);
+        })
+
+         app.post('/posts', async (req, res) => {
+            const post = req.body;
+            const result = await postCollection.insertOne(post);
+            res.send(result);
+        });
 
         // app.get('/bookings/:id', async (req, res) => {
         //     const id = req.params.id;
