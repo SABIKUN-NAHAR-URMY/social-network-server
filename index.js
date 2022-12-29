@@ -19,13 +19,6 @@ async function run() {
         const usersCollection = client.db('socialNetwork').collection('users');
         const postCollection = client.db('socialNetwork').collection('posts');
         
-
-        // app.get('/category', async (req, res) => {
-        //     const query = {};
-        //     const result = await watchesCategoryCollection.find(query).toArray();
-        //     res.send(result);
-        // })
-
         app.get('/users', async(req, res)=>{
             const query = {};
             const users = await usersCollection.find(query).toArray();
@@ -75,7 +68,6 @@ async function run() {
 
         })
 
-
         app.get('/posts', async(req, res)=>{
             const query = {};
             const posts = await postCollection.find(query).toArray();
@@ -87,37 +79,6 @@ async function run() {
             const result = await postCollection.insertOne(post);
             res.send(result);
         });
-
-        // app.get('/bookings/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const query = { _id: ObjectId(id) };
-        //     const booking = await bookingsCollection.findOne(query);
-        //     res.send(booking);
-        // })
-
-        
-        // app.post('/bookings', async (req, res) => {
-        //     const booking = req.body;
-        //     const query = {
-        //         email: booking.email,
-        //         itemName: booking.itemName
-        //     }
-        //     const alreadyBooked = await bookingsCollection.find(query).toArray();
-        //     if (alreadyBooked.length) {
-        //         return res.send({ acknowledged: false });
-        //     }
-        //     const result = await bookingsCollection.insertOne(booking);
-        //     res.send(result);
-        // });
-
-     
-        // app.delete('/reported/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const query = { _id: ObjectId(id) };
-        //     const result = await watchesProductsCollection.deleteOne(query);
-        //     const resultData = await reportedCollection.deleteOne({_id: id });
-        //     res.send(resultData);
-        // })
 
     }
     finally {
