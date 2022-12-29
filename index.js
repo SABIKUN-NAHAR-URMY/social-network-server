@@ -18,6 +18,7 @@ async function run() {
     try {
         const usersCollection = client.db('socialNetwork').collection('users');
         const postCollection = client.db('socialNetwork').collection('posts');
+        const commentCollection = client.db('socialNetwork').collection('comments');
         
         app.get('/users', async(req, res)=>{
             const query = {};
@@ -46,27 +47,27 @@ async function run() {
             res.send(result);
         })
 
-        app.patch('/users/:email', async (req, res) => {
-            const email = req.params.email;
-            const query = { email};
-            const option = {upsert : true};
-            const updateDoc = {
-                $set: {
-                    bio: bio,
-                    address: address,
-                    email: email,
-                    interests: interests,
-                    languages: languages,
-                    name: name,
-                    university: university,
-                    workExp: workExp,
+        // app.patch('/users/:email', async (req, res) => {
+        //     const email = req.params.email;
+        //     const query = { email};
+        //     const option = {upsert : true};
+        //     const updateDoc = {
+        //         $set: {
+        //             bio: bio,
+        //             address: address,
+        //             email: email,
+        //             interests: interests,
+        //             languages: languages,
+        //             name: name,
+        //             university: university,
+        //             workExp: workExp,
 
-                }
-            }
-            const result = await usersCollection.updateOne(query, updateDoc, option);
-            res.send(result);
+        //         }
+        //     }
+        //     const result = await usersCollection.updateOne(query, updateDoc, option);
+        //     res.send(result);
 
-        })
+        // })
 
         app.get('/posts', async(req, res)=>{
             const query = {};
@@ -74,11 +75,25 @@ async function run() {
             res.send(posts);
         })
 
+
+        app.get('/posts/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const post = await postCollection.findOne(query);
+            res.send(post);
+        })
+
          app.post('/posts', async (req, res) => {
             const post = req.body;
             const result = await postCollection.insertOne(post);
             res.send(result);
         });
+
+        app.post('/comment', async (req, res) => {
+            const comment = req.body;
+            const result = await commentCollection.insertOne(comment);
+            res.send(result);
+        })
 
     }
     finally {
