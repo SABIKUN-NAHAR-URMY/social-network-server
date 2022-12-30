@@ -89,11 +89,24 @@ async function run() {
             res.send(result);
         });
 
+        app.get('/comments/queryPost', async (req, res) => {
+
+            let query = {};
+            if (req.query.postId) {
+                query = {
+                    postId: req.query.postId
+                }
+            }
+            const cursor = commentCollection.find(query);
+            const comments = await cursor.toArray();
+            res.send(comments);
+        })
+
         app.post('/comment', async (req, res) => {
             const comment = req.body;
             const result = await commentCollection.insertOne(comment);
             res.send(result);
-        })
+        });
 
     }
     finally {
