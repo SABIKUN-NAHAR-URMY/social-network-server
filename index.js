@@ -47,27 +47,27 @@ async function run() {
             res.send(result);
         })
 
-        // app.patch('/users/:email', async (req, res) => {
-        //     const email = req.params.email;
-        //     const query = { email};
-        //     const option = {upsert : true};
-        //     const updateDoc = {
-        //         $set: {
-        //             bio: bio,
-        //             address: address,
-        //             email: email,
-        //             interests: interests,
-        //             languages: languages,
-        //             name: name,
-        //             university: university,
-        //             workExp: workExp,
+        app.patch('/users/:email', async (req, res) => {
+            const email = req.params.email;
+            const text = req.body;
+            const query = { email};
+            const option = {upsert : true};
+            const updateDoc = {
+                $set: {
+                    bio: text.bio,
+                    address: text.address,
+                    email: text.email,
+                    interests: text.interests,
+                    languages: text.languages,
+                    name: text.name,
+                    university: text.university,
+                    workExp: text.workExp
+                }
+            }
+            const result = await usersCollection.updateOne(query, updateDoc, option);
+            res.send(result);
 
-        //         }
-        //     }
-        //     const result = await usersCollection.updateOne(query, updateDoc, option);
-        //     res.send(result);
-
-        // })
+        })
 
         app.get('/posts', async(req, res)=>{
             const query = {};
@@ -76,7 +76,7 @@ async function run() {
         })
 
 
-        app.get('/posts/:id', async (req, res) => {
+        app.get('/details/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const post = await postCollection.findOne(query);
