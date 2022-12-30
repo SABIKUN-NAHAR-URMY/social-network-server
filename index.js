@@ -26,6 +26,20 @@ async function run() {
             res.send(users);
         })
 
+
+        app.get('/users/queryEmail', async (req, res) => {
+
+            let query = {};
+            if (req.query.email) {
+                query = {
+                    email: req.query.email
+                }
+            }
+            const cursor = usersCollection.find(query);
+            const user = await cursor.toArray();
+            res.send(user);
+        })
+
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email };
@@ -100,7 +114,7 @@ async function run() {
             const cursor = commentCollection.find(query);
             const comments = await cursor.toArray();
             res.send(comments);
-        })
+        });
 
         app.post('/comment', async (req, res) => {
             const comment = req.body;
