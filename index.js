@@ -85,7 +85,7 @@ async function run() {
 
         app.get('/posts', async(req, res)=>{
             const query = {};
-            const posts = await postCollection.find(query).toArray();
+            const posts = await postCollection.find(query).sort({reactCount: -1}).toArray();
             res.send(posts);
         })
 
@@ -120,6 +120,19 @@ async function run() {
             const comment = req.body;
             const result = await commentCollection.insertOne(comment);
             res.send(result);
+        });
+
+        app.post('/react', async (req, res) => {
+            // const {pId, count} = req.body;
+            const postId = req.body.pId;
+            const count = req.body.count;
+            const updateDoc = {
+                $set: {
+                    reactCount : count + 1
+                }
+            }
+            const postUpdate = await postCollection.updateOne({_id : ObjectId(postId)}, updateDoc);
+            res.send(postUpdate);
         });
 
     }
